@@ -199,9 +199,9 @@ const Contact = () => {
     <div className="bg-[#f8f9fa] flex flex-col pt-16">
       {/* Hero Section */}
       {/* add the imported image as the bg-image in the below div */}
-      <div ref={heroRef} className="bg-white shadow-md shadow-[#abadad] rounded-4xl text-gray-900 py-8 md:py-10 border-gray-200">
-        <div className='w-full h-155 absolute hidden lg:block' style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundPositionY: '-120px' }}></div>
-        <div className="max-w-7xl mx-auto px-4 gap-y-2 sm:px-6 lg:px-8 text-center h-145 flex flex-col justify-center">
+      <div ref={heroRef} className="relative overflow-hidden bg-white shadow-md shadow-[#abadad] rounded-4xl text-gray-900 py-8 md:py-10 border-gray-200">
+        <div className='absolute inset-0 hidden lg:block' style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundPositionY: '-120px' }}></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 gap-y-2 sm:px-6 lg:px-8 text-center h-145 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-3" style={fadeInDown}>Contact our team</h1>
           <p className="text-xl md:text-lg text-gray-600 max-w-3xl mx-auto" style={fadeInDownSubtitle}>
             We're here to help and answer any question you might have. Reach out to us and we'll respond as soon as possible.

@@ -10,6 +10,7 @@ const ratingOptions = [4, 3, 2];
 const Product = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const [priceLimit, setPriceLimit] = useState(0);
   const [minRating, setMinRating] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
@@ -59,10 +60,11 @@ const Product = () => {
       const categoryMatch = selectedCategory === 'All' ? true : item.category === selectedCategory;
       const priceMatch = priceRange.max === 0 ? true : item.price <= priceLimit;
       const ratingMatch = item.rating >= minRating;
+      const nameMatch = (item.name || '').toLowerCase().includes(searchTerm.trim().toLowerCase());
 
-      return categoryMatch && priceMatch && ratingMatch;
+      return categoryMatch && priceMatch && ratingMatch && nameMatch;
     });
-  }, [selectedCategory, priceLimit, minRating]);
+  }, [products, selectedCategory, priceLimit, minRating, priceRange.max, searchTerm]);
 
   const openProduct = (productId) => {
     window.scrollTo(0, 0);
@@ -128,6 +130,13 @@ const Product = () => {
             <div className={`${showFilters ? 'block' : 'hidden'} lg:block space-y-7`}>
               <div>
                 <h2 className="text-sm font-semibold tracking-wide text-neutral-900 uppercase mb-4">Category</h2>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by product name"
+                  className="mb-3 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-700 outline-none transition focus:border-neutral-400"
+                />
                 <div className="space-y-2.5">
                   {categories.map((category) => (
                     <button

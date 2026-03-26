@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Mail, User, CalendarDays, ShieldCheck, UserCircle2, BadgeCheck } from 'lucide-react';
 import { getAuthUser, isAuthenticated } from '../lib/auth';
+import BackButton from '../components/BackButton';
 
 const Profile = () => {
   useEffect(() => {
@@ -36,6 +37,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,#e8f8f3_0,#f7fbfa_35%,#f8f8f6_70%)] pt-24 pb-14">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-10">
+        <BackButton fallback="/" />
         <div className="rounded-3xl bg-white border border-emerald-100 shadow-[0_18px_48px_rgba(10,77,58,0.12)] overflow-hidden">
           <div className="bg-linear-to-r from-[#0a6b53] via-[#0b8b69] to-[#15b184] px-6 py-8 text-white">
             <p className="text-xs uppercase tracking-[0.24em] opacity-80">Account Center</p>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
+import BackButton from '../components/BackButton';
 
 const faqs = [
   {
@@ -24,6 +25,7 @@ const Help = () => {
   return (
     <div className="min-h-screen bg-[#f8f8f6] pt-24 pb-14">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-10 space-y-6">
+        <BackButton fallback="/" />
         <div className="rounded-2xl border border-neutral-200 bg-[#007E5D] p-6 sm:p-8 shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
           <h1 className="text-3xl font-semibold text-white">Help & Support</h1>
           <p className="mt-2 text-sm text-white">Find quick answers and contact our support team.</p>

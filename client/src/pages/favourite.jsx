@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { fetchProducts } from '../lib/productsApi';
 import { SHOP_DATA_EVENT, addToCart, getFavouriteIds, toggleFavourite } from '../lib/shopStorage';
+import BackButton from '../components/BackButton';
 
 const Favourite = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const Favourite = () => {
   return (
     <div className="min-h-screen bg-[#f8f8f6] pt-24 pb-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+        <BackButton fallback="/product" />
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-semibold text-neutral-900">My Favourites</h1>

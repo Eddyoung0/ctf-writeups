@@ -10,6 +10,7 @@ const ratingOptions = [4, 3, 2];
 const HomeKitchen = () => {
   const navigate = useNavigate();
   const [selectedDepartment, setSelectedDepartment] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const [priceLimit, setPriceLimit] = useState(0);
   const [minRating, setMinRating] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
@@ -59,9 +60,11 @@ const HomeKitchen = () => {
       const departmentMatch = selectedDepartment === 'All' ? true : item.department === selectedDepartment;
       const priceMatch = priceRange.max === 0 ? true : item.price <= priceLimit;
       const ratingMatch = item.rating >= minRating;
-      return departmentMatch && priceMatch && ratingMatch;
+      const nameMatch = (item.name || '').toLowerCase().includes(searchTerm.trim().toLowerCase());
+
+      return departmentMatch && priceMatch && ratingMatch && nameMatch;
     });
-  }, [selectedDepartment, priceLimit, minRating, products, priceRange.max]);
+  }, [products, selectedDepartment, priceLimit, minRating, priceRange.max, searchTerm]);
 
   const openProduct = (productId) => {
     window.scrollTo(0, 0);
@@ -124,6 +127,13 @@ const HomeKitchen = () => {
             <div className={`${showFilters ? 'block' : 'hidden'} lg:block space-y-7`}>
               <div>
                 <h2 className="text-sm font-semibold tracking-wide text-neutral-900 uppercase mb-4">Department</h2>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by product name"
+                  className="mb-3 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-700 outline-none transition focus:border-neutral-400"
+                />
                 <div className="space-y-2.5">
                   {departmentOptions.map((department) => (
                     <button
@@ -257,6 +267,7 @@ const HomeKitchen = () => {
                     setSelectedDepartment('All');
                     setMinRating(0);
                     setPriceLimit(priceRange.max || 0);
+                    setSearchTerm('');
                   }}
                   className="mt-4 rounded-full bg-neutral-900 px-5 py-2 text-sm text-white hover:bg-neutral-700 transition"
                 >

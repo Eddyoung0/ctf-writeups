@@ -86,7 +86,11 @@ const navbar2 = () => {
             {menuItems.map((item) => (
               <div key={item.label} className="relative group">
                 <button className="flex items-center gap-2 text-gray-700 hover:text-[#007E5D] transition-colors duration-200 text-md"
-                onClick = {() => navigate(item.link)}>
+                onClick={() => {
+                  if (!item.dropdown) {
+                    navigate(item.link);
+                  }
+                }}>
                   {item.label}
                   {item.dropdown && (
                     <ChevronDown size={16} className="group-hover:rotate-180 transition-transform duration-300 " />

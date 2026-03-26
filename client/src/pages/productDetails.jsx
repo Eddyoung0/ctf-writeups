@@ -4,6 +4,7 @@ import { Heart, MapPin, Star, ChevronDown, ShoppingCart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { addToCart, getFavouriteIds, toggleFavourite } from '../lib/shopStorage';
 import { fetchProductById } from '../lib/productsApi';
+import BackButton from '../components/BackButton';
 
 const sizes = ['6', '8', '10', '12', '14', '16', '18', '20', '22'];
 
@@ -12,14 +13,12 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeImage, setActiveImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('6');
   const [activeTab, setActiveTab] = useState('details');
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setActiveImage(0);
     setSelectedSize('6');
     setActiveTab('details');
 
@@ -81,17 +80,12 @@ const ProductDetails = () => {
   }
 
   const primaryImage = String(product.image || '').trim();
-  const galleryImages = Array.isArray(product.images)
+  const fallbackGalleryImage = Array.isArray(product.images)
     ? product.images
       .map((img) => String(img || '').trim())
-      .filter(Boolean)
-    : [];
-
-  // Always keep the latest primary image as the first image shown in details view.
-  const composedImages = [primaryImage, ...galleryImages.filter((img) => img !== primaryImage)].filter(Boolean);
-  const images = composedImages.length > 3
-    ? composedImages.filter((_, index) => index !== 1)
-    : composedImages;
+      .find(Boolean)
+    : '';
+  const displayImage = primaryImage || fallbackGalleryImage;
   const showSizeSelector = product.department === 'clothing';
 
   const reviews = [
@@ -112,30 +106,15 @@ const ProductDetails = () => {
   return (
     <div className="min-h-screen bg-[#f4f4f4] pt-24 pb-14">
       <div className="max-w-[1100px] mx-auto px-4">
+        <BackButton fallback="/product" />
         <div className="bg-white border border-gray-200 rounded-xl p-6 lg:p-8">
           <div className="text-xs text-gray-500 mb-6">
             Home / {product.department} / {product.name}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-8">
-            <div className="grid grid-cols-[88px_1fr] gap-3">
-              <div className="space-y-3">
-                {images.map((img, index) => (
-                  <button
-                    key={img + index}
-                    onClick={() => setActiveImage(index)}
-                    className={`w-[82px] h-[110px] border rounded-md overflow-hidden ${
-                      activeImage === index ? 'border-[#22c3b7]' : 'border-gray-200'
-                    }`}
-                  >
-                    <img src={img} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-[#f5f5f5] rounded-md overflow-hidden h-[360px] sm:h-[430px]">
-                <img src={images[activeImage]} alt={product.name} className="w-full h-full object-cover" />
-              </div>
+            <div className="bg-[#f5f5f5] rounded-md overflow-hidden h-[360px] sm:h-[430px]">
+              <img src={displayImage} alt={product.name} className="w-full h-full object-cover" />
             </div>
 
             <div>

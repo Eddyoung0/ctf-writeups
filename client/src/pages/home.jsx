@@ -7,6 +7,7 @@ import { fetchProducts } from '../lib/productsApi';
 const Home = () => {
   const [likedProducts, setLikedProducts] = useState({});
   const [products, setProducts] = useState([]);
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const navigate = useNavigate();
   const recentlyViewedRef = useRef(null);
 
@@ -37,6 +38,85 @@ const Home = () => {
     },
   ];
 
+  const heroSlides = [
+    {
+      id: 1,
+      title: 'SHOP COMPUTERS',
+      subtitle: '& ACCESSORIES',
+      bullets: [
+        'Shop laptops, desktops, monitors, tablets, PC gaming',
+        'Hard drives and storage, accessories and more',
+      ],
+      ctaLink: '/product/electronics',
+      ctaLabel: 'View Electronics',
+      image: 'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=1000&q=80',
+      imageAlt: 'Featured electronics',
+      productName: 'JBL T450BT Black Headphones',
+      price: '$125.00',
+      oldPrice: '$258.00',
+      badge: '50%',
+      accent: '#007E5D',
+      bgGradient: 'linear-gradient(120deg, #e5edf9 0%, #f2f6ff 55%, #e8eef9 100%)',
+    },
+    {
+      id: 2,
+      title: 'SHOP FASHION',
+      subtitle: '& CLOTHING',
+      bullets: [
+        'Explore modern outfits, essentials, and seasonal arrivals',
+        'Discover premium styles for daily comfort and confidence',
+      ],
+      ctaLink: '/product',
+      ctaLabel: 'View Clothing',
+      image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1000&q=80',
+      imageAlt: 'Featured clothing',
+      productName: 'Premium Casual Collection',
+      price: '$89.00',
+      oldPrice: '$139.00',
+      badge: '35%',
+      accent: '#8A3B12',
+      bgGradient: 'linear-gradient(120deg, #ebe9e4 0%, #f4f3ef 55%, #e7e4dd 100%)',
+    },
+    {
+      id: 3,
+      title: 'SHOP FRESH',
+      subtitle: '& GROCERIES',
+      bullets: [
+        'Stock up on daily essentials and pantry favorites',
+        'Fresh picks with value-focused bundles every week',
+      ],
+      ctaLink: '/product/groceries',
+      ctaLabel: 'View Groceries',
+      image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=1000&q=80',
+      imageAlt: 'Featured groceries',
+      productName: 'Fresh Grocery Basket',
+      price: '$45.00',
+      oldPrice: '$68.00',
+      badge: '30%',
+      accent: '#1D7A2E',
+      bgGradient: 'linear-gradient(120deg, #e7f5e9 0%, #f3fbf4 55%, #e7f5ea 100%)',
+    },
+    {
+      id: 4,
+      title: 'SHOP HOME',
+      subtitle: '& KITCHEN',
+      bullets: [
+        'Upgrade your home with practical daily-use essentials',
+        'Kitchen and home products designed for comfort and style',
+      ],
+      ctaLink: '/product/home-kitchen',
+      ctaLabel: 'View Home & Kitchen',
+      image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1000&q=80',
+      imageAlt: 'Featured home and kitchen',
+      productName: 'Home Essentials Set',
+      price: '$72.00',
+      oldPrice: '$110.00',
+      badge: '25%',
+      accent: '#5E4A2F',
+      bgGradient: 'linear-gradient(120deg, #f7efe6 0%, #fbf6f0 55%, #f4e9dc 100%)',
+    },
+  ];
+
   const quickLinks = [
     { label: "Recommendations for you", icon: "🎁", action: 'recent' },
     { label: "Your Orders", icon: "📦", action: 'orders' },
@@ -54,6 +134,14 @@ const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [heroSlides.length]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -179,57 +267,65 @@ const Home = () => {
     </div>
   );
 
+  const currentHeroSlide = heroSlides[activeHeroSlide];
+
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-20 bg-[#faf8f5]">
+      <section
+        className="pt-20 transition-all duration-500"
+        style={{ backgroundImage: currentHeroSlide.bgGradient }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-5 items-center">
             <div className="animate-slide-up">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                SHOP COMPUTERS
-                <br />& ACCESSORIES
+                {currentHeroSlide.title}
+                <br />{currentHeroSlide.subtitle}
               </h1>
               <ul className="space-y-2 text-gray-600 mb-8 text-sm md:text-base">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full shrink-0" />
-                  Shop laptops, desktops, monitors, tablets, PC gaming
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full shrink-0" />
-                  Hard drives and storage, accessories and more
-                </li>
+                {currentHeroSlide.bullets.map((bullet) => (
+                  <li key={bullet} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full shrink-0" />
+                    {bullet}
+                  </li>
+                ))}
               </ul>
               <button
                 className="bg-gray-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors"
-                onClick={() => window.location.href = '/product'}
+                onClick={() => navigate(currentHeroSlide.ctaLink)}
               >
-                View more
+                {currentHeroSlide.ctaLabel}
               </button>
+
+              <div className="mt-6 flex items-center gap-2">
+                {heroSlides.map((slide, index) => (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    aria-label={`Go to ${slide.title}`}
+                    onClick={() => setActiveHeroSlide(index)}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activeHeroSlide === index ? 'w-8 bg-neutral-900' : 'w-2.5 bg-neutral-300 hover:bg-neutral-500'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             <div className="relative flex justify-center animate-fade-in">
               <div className="relative">
-                <div className="absolute -top-2 right-4 lg:right-8 bg-[#007E5D] text-white font-bold text-lg w-16 h-16 rounded-full flex items-center justify-center z-10 shadow-lg">
-                  50%
+                <div
+                  className="absolute -top-2 right-4 lg:right-8 text-white font-bold text-lg w-16 h-16 rounded-full flex items-center justify-center z-10 shadow-lg"
+                  style={{ backgroundColor: currentHeroSlide.accent }}
+                >
+                  {currentHeroSlide.badge}
                 </div>
                 <img
-                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop"
-                  alt="Featured headphones"
-                  className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-contain drop-shadow-2xl"
+                  src={currentHeroSlide.image}
+                  alt={currentHeroSlide.imageAlt}
+                  className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover rounded-3xl drop-shadow-2xl"
                 />
-              </div>
-              <div className="absolute bottom-4 right-4 bg-white rounded-xl shadow-lg p-4 w-52 hidden lg:block">
-                <p className="text-xs text-gray-500 mb-1">JBL T450BT Black Headphones</p>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-lg font-bold text-gray-900">$125.00</span>
-                  <span className="text-sm text-gray-400 line-through">$258.00</span>
-                </div>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-8 h-8 bg-gray-100 rounded" />
-                  ))}
-                </div>
               </div>
             </div>
           </div>
